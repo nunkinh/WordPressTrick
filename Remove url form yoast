@@ -16,3 +16,19 @@ add_filter(
 		return array_merge( $ids, $my_exclude_ids );
 	}
 );
+
+add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', 'exclude_posts_from_xml_sitemaps' );
+function exclude_posts_from_xml_sitemaps() {
+  $slugs = array('example1', 'example2', 'example3');
+  $ids = array();
+
+  foreach ( $slugs as $slug ) {
+    $page = get_page_by_path( $slug );
+
+    if ( $page !== null ) {
+        $ids[] = $page->ID;
+    }
+  }
+
+  return $ids;
+}
