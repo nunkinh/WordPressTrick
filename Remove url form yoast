@@ -1,1 +1,18 @@
+add_filter(
+	'the_seo_framework_sitemap_exclude_ids',
+	function( $ids ) {
 
+		$my_exclude_ids = new WP_Query( array( // Why have you change this? I tested my code before I sent it to you.
+			'post_type' => 'page', // Post type "page" doesn't have taxonomies by default, so a 'tax_query' won't work.
+			'tax_query' => array( // Why use an archaic form of array() instead of the easier to read and write []?
+				array(
+					'taxonomy' => 'post_Tag', // should be post_tag. Everything is case-sensitive. But you wrote "category" in your initial request...? post_tag are also for post, not page.
+					'field'    => 'tag_id',   // should be term_id
+					'terms'    => 179,
+				),
+			),
+		) );
+
+		return array_merge( $ids, $my_exclude_ids );
+	}
+);
