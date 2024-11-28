@@ -32,3 +32,19 @@ function exclude_posts_from_xml_sitemaps() {
 
   return $ids;
 }
+
+
+/** Remove all child URL of https://yourwebsite.com/accueil-notice/ from YoastSEO sitemap **/
+function filter_sitemap_entries($url, $type, $post) {
+    // Vérifier si l'URL contient "/accueil-notice/" et n'est pas la page principale de "accueil-notice"
+    if (strpos($url['loc'], '/accueil-notice/') !== false && $url['loc'] !== 'https://yourwebsite.com/accueil-notice/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }
+    
+    // Sinon, retourner l'URL inchangé
+    return $url;
+}
+
+// Ajouter le filtre
+add_filter('wpseo_sitemap_entry', 'filter_sitemap_entries', 10, 3);
