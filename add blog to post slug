@@ -1,1 +1,31 @@
+<?php
+/**
+ *
+ * @return void
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
+function add_blog_slug_to_post_permalink($permalink, $post) {
+    // Only change the permalink structure for posts
+    if ($post->post_type == 'post') {
+        return home_url('/blog/' . $post->post_name);
+    }
+    return $permalink;
+}
+add_filter('post_type_link', 'add_blog_slug_to_post_permalink', 10, 2);
+
+function custom_post_permalink_structure( $permalink, $post ) {
+    if ( $post->post_type == 'post' ) {
+        $permalink = home_url( '/blog/' . $post->post_name . '/' );
+    }
+    return $permalink;
+}
+add_filter( 'post_link', 'custom_post_permalink_structure', 10, 2 );
+
+
+function add_custom_blog_rewrite_rules() {
+    add_rewrite_rule('^blog/([^/]*)/?', 'index.php?name=$matches[1]', 'top');
+}
+add_action('init', 'add_custom_blog_rewrite_rules');
