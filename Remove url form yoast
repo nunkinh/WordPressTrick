@@ -48,3 +48,56 @@ function filter_sitemap_entries($url, $type, $post) {
 
 // Ajouter le filtre
 add_filter('wpseo_sitemap_entry', 'filter_sitemap_entries', 10, 3);
+
+
+
+
+
+
+/** Remove all child URL of https://yourwebsite.com/accueil-notice/ from YoastSEO sitemap **/
+function filter_sitemap_entries($url, $type, $post) {
+	$home_url = get_home_url();
+    // Vérifier si l'URL contient "/accueil-notice/" et n'est pas la page principale de "accueil-notice"
+    if (strpos($url['loc'], '/shop/') !== false && $url['loc'] !== $home_url.'/shop/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }
+	
+    if (strpos($url['loc'], '/cart/') !== false && $url['loc'] !== $home_url.'/cart/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }	
+	
+    if (strpos($url['loc'], '/checkout/') !== false && $url['loc'] !== $home_url.'/checkout/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }	
+	
+    if (strpos($url['loc'], '/my-account/') !== false && $url['loc'] !== $home_url.'/my-account/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }	
+	
+    if (strpos($url['loc'], '/your-wabi-journey/') !== false && $url['loc'] !== $home_url.'/your-wabi-journey/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }		
+	
+    if (strpos($url['loc'], '/mitre-10/') !== false && $url['loc'] !== $home_url.'/mitre-10/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }			
+    
+    if (strpos($url['loc'], '/pdf-brochure-download/') !== false && $url['loc'] !== $home_url.'/pdf-brochure-download/') {
+        // Retourner un tableau vide pour exclure cet URL du sitemap
+        return array();
+    }				
+	
+	
+	
+    // Sinon, retourner l'URL inchangé
+    return $url;
+}
+
+// Ajouter le filtre
+add_filter('wpseo_sitemap_entry', 'filter_sitemap_entries', 10, 3);
