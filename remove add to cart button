@@ -8,7 +8,59 @@ function custom_product_button(){
     echo '<a class="button" href="'.$button_link.'">' . $button_text . '</a>';
 }
 
+
+
+
+// **********************************
+
 // Replacing the single product button add to cart by a custom button for a specific product category
+
+add_action( 'woocommerce_single_product_summary', 'replace_single_add_to_cart_button', 1 );
+function replace_single_add_to_cart_button() {
+    global $product;
+    
+    if( $product->is_type( 'variable' ) ) {
+        remove_action( 'woocommerce_single_variation', 'woocommerce_single_variation_add_to_cart_button', 20 );
+        add_action( 'woocommerce_single_variation', 'custom_product_button', 20 );
+    }
+    // For all other product types
+    else {
+        remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+        add_action( 'woocommerce_single_product_summary', 'custom_product_button', 30 );
+    }
+}
+
+// Replacing the button add to cart by a link to the product in Shop and archives pages for as specific product category
+add_filter( 'woocommerce_loop_add_to_cart_link', 'replace_loop_add_to_cart_button', 10, 2 );
+function replace_loop_add_to_cart_button( $button, $product  ) {
+    // Only for product category ID 64
+    $button_text = __( "View product", "woocommerce" );
+    $button = '<a class="button" href="' . $product->get_permalink() . '">' . $button_text . '</a>';
+
+    return $button;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Replacing the single product button add to cart by a custom button for a specific product category
+
 add_action( 'woocommerce_single_product_summary', 'replace_single_add_to_cart_button', 1 );
 function replace_single_add_to_cart_button() {
     global $product;
