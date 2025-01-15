@@ -1,0 +1,54 @@
+function my_dynamic_menu_items( $menu_items ) {
+
+    // A list of placeholders to replace.
+    // You can add more placeholders to the list as needed.
+    $placeholders = array(
+        '#profile_link#' => array(
+            'shortcode' => 'my_shortcode',
+            'atts' => array(), // Shortcode attributes.
+            'content' => '', // Content for the shortcode.
+        ),
+    );
+
+    foreach ( $menu_items as $menu_item ) {
+
+        if ( isset( $placeholders[ $menu_item->url ] ) ) {
+
+            global $shortcode_tags;
+
+            $placeholder = $placeholders[ $menu_item->url ];
+
+            if ( isset( $shortcode_tags[ $placeholder['shortcode'] ] ) ) {
+
+                $menu_item->url = call_user_func( 
+                    $shortcode_tags[ $placeholder['shortcode'] ]
+                    , $placeholder['atts']
+                    , $placeholder['content']
+                    , $placeholder['shortcode']
+                );
+            }
+        }
+    }
+
+    return $menu_items;
+}
+add_filter( 'wp_nav_menu_objects', 'my_dynamic_menu_items' );
+
+function func_sample_shortcode_1(){
+	if( is_user_logged_in() ){
+// 		return str_replace(['http://', 'https://'], ['', ''], home_url('/'));
+		return str_replace(['http://', 'https://'], ['', ''], wp_logout_url( home_url() ));
+	}
+	return '#';
+}
+add_shortcode('shortcode_sample_1', 'func_sample_shortcode_1');
+
+function func_sample_shortcode_2(){
+	if( is_user_logged_in() ){
+		global $current_user; wp_get_current_user();
+		$html = '<span class="elementor-icon" style="display: inline-block; margin-right: 4px;"><svg style="width: 24px; height: 24px;" aria-hidden="true" class="e-font-icon-svg e-fas-user" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg></span><span>'. $current_user->display_name .'</span>';
+		return $html;
+	}
+	return '#';
+}
+add_shortcode('shortcode_sample_2', 'func_sample_shortcode_2');
