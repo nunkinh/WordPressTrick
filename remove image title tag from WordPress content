@@ -1,0 +1,5 @@
+// Remove image title tag from WordPress content
+function remove_thumbnail_title($html) {
+    return preg_replace('/title=["\'].*?["\']/', '', $html);
+}
+add_filter('post_thumbnail_html', 'remove_thumbnail_title', 6666666, 1);
