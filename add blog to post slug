@@ -53,3 +53,13 @@ function wabi_redirect_post_type_to_blog() {
     }
 }
 add_action('template_redirect', 'wabi_redirect_post_type_to_blog');
+
+
+function rewrite_custom_canonical_url($canonical) {
+    if (is_singular('post')) {
+        $post_slug = get_post_field('post_name', get_queried_object_id());
+        return home_url('/blog/' . $post_slug . '/');
+    }
+    return $canonical;
+}
+add_filter('wpseo_canonical', 'rewrite_custom_canonical_url');
